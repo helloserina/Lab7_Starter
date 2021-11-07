@@ -136,7 +136,6 @@ function createRecipeCards() {
     router.addPage(page, function() {
       document.querySelector('.section--recipe-cards').classList.remove('shown');
       document.querySelector('.section--recipe-expand').classList.add('shown');
-      recipeCard.classList.add('hidden');
       document.querySelector('recipe-expand').data = recipeData[json];
     });
     if (i > 2) {
@@ -201,7 +200,7 @@ function bindEscKey() {
    * page. This will let us go back to the home page from the detailed page.
    */
   document.addEventListener('keydown', function(e) {
-    if (e == "Escape") {
+    if (e.key == "Escape") {
       router.navigate("home", false);
     }
   });
@@ -226,11 +225,11 @@ function bindPopstate() {
    * so your navigate() function does not add your going back action to the history,
    * creating an infinite loop
    */
-  document.addEventListener('popstate', (event) =>  {
+  window.addEventListener('popstate', (event) =>  {
     if (event.state) {
-      navigate(event.state, True);
+      router.navigate(event.state, true);
     } else {
-      navigate('home', True);
+      router.navigate('home', true);
     }
   });
 }

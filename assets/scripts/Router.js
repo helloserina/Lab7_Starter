@@ -71,15 +71,21 @@ export class Router {
       console.log(`Error fetching stored function`);
       return;
     }
+
     let hash = "";
-    if (this[page] != 'home') {
-      hash = "#" + this[page];
+    if (page != 'home') {
+      hash = "#" + page;
     }
+    //console.log("generated hash =", hash);
+    //console.log("window.location.hash = " + window.location.hash);
 
     if (!statePopped && window.location.hash != hash) {
       history.pushState(statePopped, window.location.origin + hash);
+      window.location.hash = hash;
+      console.log("pushed " +  window.location.origin + hash);
     }
 
+    //console.log("calling function " + this[page]);
     this[page]();
   }
 }
