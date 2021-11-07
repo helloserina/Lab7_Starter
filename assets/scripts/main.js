@@ -25,6 +25,9 @@ const router = new Router(function () {
    * This will only be two single lines
    * If you did this right, you should see just 1 recipe card rendered to the screen
    */
+
+  document.querySelector("section.section--recipe-cards").classList.add("shown");
+  document.querySelector("section.section--recipe-expand").classList.remove("shown");
 });
 
 window.addEventListener('DOMContentLoaded', init);
@@ -99,6 +102,10 @@ function createRecipeCards() {
   // in our recipes array, the ghostCookies URL, we will receive the .json
   // for that ghostCookies URL since it's a key in the recipeData object, and
   // then we'll grab the 'page-name' from it - in this case it will be 'ghostCookies'
+
+  //Commented out since it does the same thing in a for loop below
+  
+  /*
   const page = recipeData[recipes[0]]['page-name'];
   router.addPage(page, function() {
     document.querySelector('.section--recipe-cards').classList.remove('shown');
@@ -108,6 +115,7 @@ function createRecipeCards() {
   bindRecipeCard(recipeCard, page);
 
   document.querySelector('.recipe-cards--wrapper').appendChild(recipeCard);
+  */
 
   /**
    * TODO - Part 1 - Step 3
@@ -119,6 +127,24 @@ function createRecipeCards() {
    * After this step you should see multiple cards rendered like the end of the last
    * lab
    */
+
+  for (let i in recipes) {
+    const json = recipes[i];
+    const recipeCard = document.createElement('recipe-card');
+    recipeCard.data = recipeData[json];
+    const page = recipeData[json]['page-name'];
+    router.addPage(page, function() {
+      document.querySelector('.section--recipe-cards').classList.remove('shown');
+      document.querySelector('.section--recipe-expand').classList.add('shown');
+      recipeCard.classList.add('hidden');
+      document.querySelector('recipe-expand').data = recipeData[json];
+    });
+    if (i > 2) {
+      recipeCard.classList.add('hidden');
+    }
+    bindRecipeCard(recipeCard, page);
+    document.querySelector('.recipe-cards--wrapper').appendChild(recipeCard);
+  }
 }
 
 /**
@@ -174,6 +200,11 @@ function bindEscKey() {
    * if the escape key is pressed, use your router to navigate() to the 'home'
    * page. This will let us go back to the home page from the detailed page.
    */
+  document.addEventListener('keydown', function(e) {
+    if (e == "Escape") {
+      router.navigate("home", false);
+    }
+  });
 }
 
 /**
@@ -195,4 +226,11 @@ function bindPopstate() {
    * so your navigate() function does not add your going back action to the history,
    * creating an infinite loop
    */
+  document.addEventListener('popstate', (event) =>  {
+    if (event.state) {
+      navigate(event.state, True);
+    } else {
+      navigate('home', True);
+    }
+  });
 }
