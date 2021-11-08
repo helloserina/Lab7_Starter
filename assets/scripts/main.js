@@ -58,6 +58,18 @@ function initializeServiceWorker() {
    *  TODO - Part 2 Step 1
    *  Initialize the service worker set up in sw.js
    */
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/sw.js').then(function (registration) {
+        // Registration was successful
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }, function (err) {
+        // registration failed :(
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    });
+  }
+  // navigator.serviceWorker.
 }
 
 /**
@@ -104,7 +116,7 @@ function createRecipeCards() {
   // then we'll grab the 'page-name' from it - in this case it will be 'ghostCookies'
 
   //Commented out since it does the same thing in a for loop below
-  
+
   /*
   const page = recipeData[recipes[0]]['page-name'];
   router.addPage(page, function() {
@@ -133,7 +145,7 @@ function createRecipeCards() {
     const recipeCard = document.createElement('recipe-card');
     recipeCard.data = recipeData[json];
     const page = recipeData[json]['page-name'];
-    router.addPage(page, function() {
+    router.addPage(page, function () {
       document.querySelector('.section--recipe-cards').classList.remove('shown');
       document.querySelector('.section--recipe-expand').classList.add('shown');
       document.querySelector('recipe-expand').data = recipeData[json];
@@ -199,7 +211,7 @@ function bindEscKey() {
    * if the escape key is pressed, use your router to navigate() to the 'home'
    * page. This will let us go back to the home page from the detailed page.
    */
-  document.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', function (e) {
     if (e.key == "Escape") {
       router.navigate("home", false);
     }
@@ -225,7 +237,7 @@ function bindPopstate() {
    * so your navigate() function does not add your going back action to the history,
    * creating an infinite loop
    */
-  window.addEventListener('popstate', (event) =>  {
+  window.addEventListener('popstate', (event) => {
     if (event.state) {
       router.navigate(event.state, true);
     } else {
